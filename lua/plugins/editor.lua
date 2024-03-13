@@ -1,4 +1,7 @@
 return {
+  {
+    'pocco81/auto-save.nvim',
+  },
 	-- Hihglight colors
 	{
 		"echasnovski/mini.hipatterns",
