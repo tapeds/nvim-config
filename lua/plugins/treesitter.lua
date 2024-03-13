@@ -22,6 +22,7 @@ return {
 				"sql",
 				"vim",
 				"lua",
+        'tsx',
 			},
 			query_linter = {
 				enable = true,
