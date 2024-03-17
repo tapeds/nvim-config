@@ -1,5 +1,6 @@
 return {
 	-- tools
+	{ "f-person/git-blame.nvim" },
 	{
 		"williamboman/mason.nvim",
 		opts = function(_, opts)
