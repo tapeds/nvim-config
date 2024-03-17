@@ -1,6 +1,7 @@
 return {
   {
     'pocco81/auto-save.nvim',
+    event = "FocusLost"
   },
 	-- Hihglight colors
 	{
