@@ -1,4 +1,8 @@
 return {
+  {
+    "pocco81/auto-save.nvim",
+    event = "BufLeave"
+  },
 	-- Hihglight colors
 	{
 		"echasnovski/mini.hipatterns",
