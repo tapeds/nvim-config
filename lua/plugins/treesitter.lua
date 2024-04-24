@@ -14,6 +14,8 @@ return {
 				"javascript",
 				"typescript",
 				"css",
+        "html",
+        "go",
 				"gitignore",
 				"graphql",
 				"http",

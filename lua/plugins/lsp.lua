@@ -60,6 +60,16 @@ return {
 					},
 				},
 				html = {},
+        gopls = { -- Go language server
+          settings = {
+            gopls = {
+              analyses = {
+                unusedparams = true,
+              },
+              staticcheck = true,
+            },
+          },
+        },
 				lua_ls = {
 					-- enabled = false,
 					single_file_support = true,
