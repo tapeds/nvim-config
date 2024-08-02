@@ -6,6 +6,7 @@ return {
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		"hrsh7th/cmp-nvim-lsp",
 	},
+	lazy = true,
 	opts = {
 		inlay_hints = { enabled = true },
 		servers = {

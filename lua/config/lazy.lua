@@ -22,6 +22,7 @@ vim.opt.rtp:prepend(lazypath)
 -- loading lazy.nvim so that mappings are correct.
 -- This is also a good place to setup other settings (vim.opt)
 
+vim.o.termguicolors = true
 vim.g.mapleader = " "
 
 vim.scriptencoding = "utf-8"
