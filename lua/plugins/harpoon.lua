@@ -34,9 +34,7 @@ return {
 			},
 		})
 
-		keymap.set("n", "hh", ui.toggle_quick_menu, {})
-		keymap.set("n", "hm", mark.add_file, {})
-		keymap.set("n", "hn", ui.nav_next, {})
-		keymap.set("n", "hp", ui.nav_prev, {})
+		keymap.set("n", ";h", ui.toggle_quick_menu, {})
+		keymap.set("n", "<C-m>", mark.add_file, {})
 	end,
 }
