@@ -1,6 +1,7 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
 	opts = {
+		highlight = { enabled = true },
 		ensure_installed = {
 			"javascript",
 			"typescript",

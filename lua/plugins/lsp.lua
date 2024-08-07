@@ -39,6 +39,7 @@ return {
 						},
 						preferences = {
 							importModuleSpecifier = "non-relative",
+							importModuleSpecifierPreference = "non-relative",
 						},
 					},
 					javascript = {
