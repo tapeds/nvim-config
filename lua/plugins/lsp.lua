@@ -55,6 +55,11 @@ return {
 					},
 				},
 			},
+			gopls = {
+				root_dir = function(...)
+					return require("lspconfig.util").root_pattern("go.work", "go.mod", ".git")(...)
+				end,
+			},
 			html = {},
 			lua_ls = {
 				single_file_support = true,
@@ -153,6 +158,12 @@ return {
 			capabilities = capabilities,
 		})
 
+		lspconfig.gopls.setup({
+			capabilities = capabilities,
+			cmd = { "gopls" },
+			filetypes = { "go", "gomod", "gowork", "gotmpl" },
+		})
+
 		mason.setup({
 			ui = {
 				icons = {
@@ -168,6 +179,7 @@ return {
 				"tsserver",
 				"cssls",
 				"html",
+				"gopls",
 				"tailwindcss",
 				"lua_ls",
 			},

@@ -1,22 +1,30 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
-	opts = {
-		highlight = { enabled = true },
-		ensure_installed = {
-			"javascript",
-			"typescript",
-			"css",
-			"html",
-			"go",
-			"gitignore",
-			"graphql",
-			"http",
-			"json",
-			"scss",
-			"sql",
-			"vim",
-			"lua",
-			"tsx",
-		},
-	},
+	build = ":TSUpdate",
+	event = { "BufReadPre", "BufNewFile" },
+	config = function()
+		local configs = require("nvim-treesitter.configs")
+
+		configs.setup({
+			highlight = { enable = true },
+			sync_install = false,
+			auto_install = true,
+			ensure_installed = {
+				"javascript",
+				"typescript",
+				"css",
+				"html",
+				"go",
+				"gitignore",
+				"graphql",
+				"http",
+				"json",
+				"scss",
+				"sql",
+				"vim",
+				"lua",
+				"tsx",
+			},
+		})
+	end,
 }
