@@ -77,6 +77,12 @@ keymap.set("n", "sl", "<C-w>l")
 -- Open Error
 keymap.set("n", "ee", ":lua vim.diagnostic.open_float()<Return>")
 
+-- Move Line
+keymap.set("n", "<A-j>", ":m .+1<CR>==") -- move line up(n)
+keymap.set("n", "<A-k>", ":m .-2<CR>==") -- move line down(n)
+keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv") -- move line up(v)
+keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv") -- move line down(v)
+
 -- Setup lazy.nvim
 require("lazy").setup({
 	spec = {
