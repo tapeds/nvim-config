@@ -17,12 +17,16 @@ return {
 			cssls = {},
 			tailwindcss = {
 				root_dir = function(...)
-					return require("lspconfig.util").root_pattern(".git")(...)
+					return require("lspconfig.util").root_pattern(
+						"tailwind.config.cjs",
+						"tailwind.config.js",
+						"postcss.config.js"
+					)(...)
 				end,
 			},
 			tsserver = {
 				root_dir = function(...)
-					return require("lspconfig.util").root_pattern(".git")(...)
+					return require("lspconfig.util").root_pattern("tsconfig.json", "jsconfig.json", "package.json")(...)
 				end,
 				single_file_support = false,
 				settings = {
@@ -57,7 +61,7 @@ return {
 			},
 			gopls = {
 				root_dir = function(...)
-					return require("lspconfig.util").root_pattern("go.work", "go.mod", ".git")(...)
+					return require("lspconfig.util").root_pattern("go.work", "go.mod")(...)
 				end,
 			},
 			html = {},
