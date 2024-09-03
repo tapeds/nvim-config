@@ -16,6 +16,8 @@ return {
 				json = { "prettierd", "prettier", stop_after_first = true },
 				yaml = { "prettierd", "prettier", stop_after_first = true },
 				markdown = { "prettierd", "prettier", stop_after_first = true },
+				php = { "pint" },
+				blade = { "blade-formatter" },
 			},
 			format_on_save = function(bufnr)
 				local bufname = vim.api.nvim_buf_get_name(bufnr)

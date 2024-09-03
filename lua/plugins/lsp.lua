@@ -164,6 +164,10 @@ return {
 			filetypes = { "go", "gomod", "gowork", "gotmpl" },
 		})
 
+		lspconfig.intelephense.setup({
+			capabilities = capabilities,
+		})
+
 		mason.setup({
 			ui = {
 				icons = {
@@ -182,6 +186,7 @@ return {
 				"gopls",
 				"tailwindcss",
 				"lua_ls",
+				"intelephense",
 			},
 			automatic_installation = true,
 		})
