@@ -33,11 +33,17 @@ return {
 					)(...)
 				end,
 			},
-			tsserver = {
+			vtsls = {
 				root_dir = function(...)
 					return require("lspconfig.util").root_pattern("tsconfig.json", "jsconfig.json", "package.json")(...)
 				end,
 				single_file_support = false,
+				init_options = {
+					preferences = {
+						importModuleSpecifier = "non-relative",
+						importModuleSpecifierPreference = "non-relative",
+					},
+				},
 				settings = {
 					typescript = {
 						autoClosingTags = true,
@@ -155,8 +161,15 @@ return {
 			end,
 		})
 
-		lspconfig.tsserver.setup({
+		lspconfig.vtsls.setup({
 			capabilities = capabilities,
+			settings = {
+				typescript = {
+					preferences = {
+						importModuleSpecifier = "non-relative",
+					},
+				},
+			},
 		})
 
 		lspconfig.lua_ls.setup({
@@ -205,7 +218,7 @@ return {
 
 		mason_lspconfig.setup({
 			ensure_installed = {
-				"tsserver",
+				"vtsls",
 				"cssls",
 				"html",
 				"gopls",
