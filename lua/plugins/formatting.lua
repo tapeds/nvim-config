@@ -4,14 +4,15 @@ return {
 	lazy = true,
 	config = function()
 		local conform = require("conform")
+		local util = require("conform.util")
 
 		conform.setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
-				javascript = { "prettierd", "prettier", stop_after_first = true },
-				typescript = { "prettierd", "prettier", stop_after_first = true },
-				typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-				css = { "prettierd", "prettier", stop_after_first = true },
+				javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
+				typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
+				typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
+				css = { "biome", "prettierd", "prettier", stop_after_first = true },
 				html = { "prettierd", "prettier", stop_after_first = true },
 				json = { "prettierd", "prettier", stop_after_first = true },
 				yaml = { "prettierd", "prettier", stop_after_first = true },
@@ -25,6 +26,54 @@ return {
 
 				return { timeout_ms = 500, lsp_format = "fallback" }
 			end,
+			formatters = {
+				prettier = {
+					require_cwd = true,
+					cwd = util.root_file({
+						-- https://prettier.io/docs/en/configuration.html
+						".prettierrc",
+						".prettierrc.json",
+						".prettierrc.yml",
+						".prettierrc.yaml",
+						".prettierrc.json5",
+						".prettierrc.js",
+						".prettierrc.cjs",
+						".prettierrc.mjs",
+						".prettierrc.toml",
+						"prettier.config.js",
+						"prettier.config.cjs",
+						"prettier.config.mjs",
+						-- "package.json",
+					}),
+				},
+				prettierd = {
+					require_cwd = true,
+					cwd = util.root_file({
+						-- https://prettier.io/docs/en/configuration.html
+						".prettierrc",
+						".prettierrc.json",
+						".prettierrc.yml",
+						".prettierrc.yaml",
+						".prettierrc.json5",
+						".prettierrc.js",
+						".prettierrc.cjs",
+						".prettierrc.mjs",
+						".prettierrc.toml",
+						"prettier.config.js",
+						"prettier.config.cjs",
+						"prettier.config.mjs",
+						-- "package.json",
+					}),
+				},
+				biome = {
+					require_cwd = true,
+					cwd = util.root_file({
+						-- https://prettier.io/docs/en/configuration.html
+						"biome.json",
+						-- "package.json",
+					}),
+				},
+			},
 		})
 	end,
 }

@@ -10,9 +10,18 @@ return {
 		inlay_hints = { enabled = true },
 		servers = {
 			eslint = {
+				root_dir = function(...)
+					return require("lspconfig.util").root_pattern("package.json")(...)
+				end,
 				settings = {
 					workingDirectories = { mode = "auto" },
 				},
+			},
+			biome = {
+				single_file_support = false,
+				root_dir = function(...)
+					return require("lspconfig.util").root_pattern("biome.json", "biome.jsonc")(...)
+				end,
 			},
 			cssls = {},
 			tailwindcss = {
@@ -168,6 +177,22 @@ return {
 			filetypes = { "go", "gomod", "gowork", "gotmpl" },
 		})
 
+		lspconfig.biome.setup({
+			filetypes = {
+				"javascript",
+				"javascriptreact",
+				"json",
+				"jsonc",
+				"typescript",
+				"typescript.tsx",
+				"typescriptreact",
+				"astro",
+				"svelte",
+				"vue",
+				"css",
+			},
+		})
+
 		mason.setup({
 			ui = {
 				icons = {
@@ -186,6 +211,7 @@ return {
 				"gopls",
 				"tailwindcss",
 				"lua_ls",
+				"biome",
 			},
 			automatic_installation = true,
 		})
