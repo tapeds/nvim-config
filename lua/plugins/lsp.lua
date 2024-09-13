@@ -190,6 +190,10 @@ return {
 			filetypes = { "go", "gomod", "gowork", "gotmpl" },
 		})
 
+		lspconfig.html.setup({
+			capabilities = capabilities,
+		})
+
 		lspconfig.biome.setup({
 			filetypes = {
 				"javascript",
@@ -233,7 +237,6 @@ return {
 			ensure_installed = {
 				"prettierd",
 				"prettier",
-				"eslint_d",
 				"stylua",
 				"eslint",
 			},
