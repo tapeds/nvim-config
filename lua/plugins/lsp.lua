@@ -79,6 +79,9 @@ return {
 					return require("lspconfig.util").root_pattern("go.work", "go.mod")(...)
 				end,
 			},
+			emmet_language_server = {
+				filetypes = { "html" },
+			},
 			html = {},
 			lua_ls = {
 				single_file_support = true,
@@ -194,6 +197,18 @@ return {
 			capabilities = capabilities,
 		})
 
+		lspconfig.csharp_ls.setup({
+			capabilities = capabilities,
+		})
+
+		lspconfig.emmet_language_server.setup({
+			capabilities = capabilities,
+			filetypes = {
+				"html",
+				"templ",
+			},
+		})
+
 		lspconfig.biome.setup({
 			filetypes = {
 				"javascript",
@@ -229,6 +244,8 @@ return {
 				"tailwindcss",
 				"lua_ls",
 				"biome",
+				"emmet_language_server",
+				"csharp_ls",
 			},
 			automatic_installation = true,
 		})
