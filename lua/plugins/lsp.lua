@@ -209,6 +209,10 @@ return {
 			},
 		})
 
+		lspconfig.intelephense.setup({
+			capabilities = capabilities,
+		})
+
 		lspconfig.biome.setup({
 			filetypes = {
 				"javascript",
