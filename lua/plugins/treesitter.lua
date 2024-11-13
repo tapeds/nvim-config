@@ -24,6 +24,9 @@ return {
 				"vim",
 				"lua",
 				"tsx",
+				"svelte",
+				"hcl",
+				"terraform",
 			},
 		})
 	end,
