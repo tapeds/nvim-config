@@ -242,16 +242,6 @@ return {
 			filetypes = { "terraform", "tf" },
 		})
 
-		lspconfig.tflint.setup({
-			capabilities = capabilities,
-			filetypes = { "terraform", "tf" },
-		})
-
-		lspconfig.efm.setup({
-			capabilities = capabilities,
-			filetypes = { "terraform", "tf" },
-		})
-
 		vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 			pattern = { "*.tf", "*.tfvars" },
 			callback = function()
@@ -281,10 +271,7 @@ return {
 				"emmet_language_server",
 				"csharp_ls",
 				"svelte",
-				"pylsp",
 				"terraformls",
-				"efm",
-				"tflint",
 			},
 			automatic_installation = true,
 		})
