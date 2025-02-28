@@ -269,7 +269,6 @@ return {
 				"lua_ls",
 				"biome",
 				"emmet_language_server",
-				"csharp_ls",
 				"svelte",
 				"terraformls",
 			},

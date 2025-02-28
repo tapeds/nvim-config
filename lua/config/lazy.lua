@@ -79,15 +79,16 @@ keymap.set("n", "sl", "<C-w>l")
 -- Open Error
 keymap.set("n", "ee", ":lua vim.diagnostic.open_float()<Return>")
 
+vim.opt.clipboard:append({ "unnamedplus" })
 vim.g.clipboard = {
-	name = "WslClipboard",
+	name = "macOS-clipboard",
 	copy = {
-		["+"] = "clip.exe",
-		["*"] = "clip.exe",
+		["+"] = "pbcopy",
+		["*"] = "pbcopy",
 	},
 	paste = {
-		["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-		["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+		["+"] = "pbpaste",
+		["*"] = "pbpaste",
 	},
 	cache_enabled = 0,
 }
