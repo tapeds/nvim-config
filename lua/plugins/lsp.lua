@@ -233,10 +233,6 @@ return {
 			capabilities = capabilities,
 		})
 
-		lspconfig.pylsp.setup({
-			capabilities = capabilities,
-		})
-
 		lspconfig.terraformls.setup({
 			capabilities = capabilities,
 			filetypes = { "terraform", "tf" },

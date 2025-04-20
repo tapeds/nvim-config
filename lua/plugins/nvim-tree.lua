@@ -28,6 +28,9 @@ return {
 				sort = {
 					sorter = "case_sensitive",
 				},
+				update_focused_file = {
+					enable = true,
+				},
 				view = {
 					side = "right",
 					width = 30,
