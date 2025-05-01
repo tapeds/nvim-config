@@ -42,12 +42,6 @@ return {
 							vim_item.menu = string.sub(vim_item.menu, 1, max_menu_width) .. "..."
 						end
 
-						vim_item.menu = vim_item.menu
-							or ({
-								nvim_lsp = "[LSP]",
-								luasnip = "[Snippet]",
-								buffer = "[Buffer]",
-							})[entry.source.name]
 						return vim_item
 					end,
 				},

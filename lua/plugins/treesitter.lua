@@ -27,6 +27,7 @@ return {
 				"svelte",
 				"hcl",
 				"terraform",
+				"swift",
 			},
 		})
 	end,

@@ -245,6 +245,17 @@ return {
 			filetypes = { "terraform", "tf" },
 		})
 
+		lspconfig.sourcekit.setup({
+			on_attach = function(client, bufnr)
+				vim.diagnostic.disable(bufnr)
+			end,
+			workspace = {
+				didChangeWatchedFiles = {
+					dynamicRegistration = true,
+				},
+			},
+		})
+
 		vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 			pattern = { "*.tf", "*.tfvars" },
 			callback = function()
