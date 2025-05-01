@@ -155,6 +155,13 @@ return {
 		local lspconfig = require("lspconfig")
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+		vim.api.nvim_create_autocmd("LspAttach", {
+			callback = function(args)
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, { noremap = true, silent = true })
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
+			end,
+		})
+
 		lspconfig.eslint.setup({
 			on_attach = function(client, bufnr)
 				vim.api.nvim_create_autocmd("BufWritePre", {
