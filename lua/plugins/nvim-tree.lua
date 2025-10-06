@@ -39,6 +39,13 @@ return {
 				renderer = {
 					group_empty = true,
 				},
+				filters = {
+					dotfiles = false, -- false means DO NOT hide dotfiles
+				},
+				git = {
+					enable = true,
+					ignore = false, -- show files ignored by git
+				},
 			})
 		end,
 	},
