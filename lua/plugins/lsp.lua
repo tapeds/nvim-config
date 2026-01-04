@@ -152,17 +152,16 @@ return {
 		local mason = require("mason")
 		local mason_lspconfig = require("mason-lspconfig")
 		local mason_tool_installer = require("mason-tool-installer")
-		local lspconfig = require("lspconfig")
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 		vim.api.nvim_create_autocmd("LspAttach", {
-			callback = function(args)
-				vim.keymap.set("n", "K", vim.lsp.buf.hover, { noremap = true, silent = true })
-				vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
+			callback = function()
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, { silent = true })
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, { silent = true })
 			end,
 		})
 
-		lspconfig.eslint.setup({
+		vim.lsp.config("eslint", {
 			on_attach = function(client, bufnr)
 				client.server_capabilities.diagnosticProvider = false
 				vim.api.nvim_create_autocmd("BufWritePre", {
@@ -172,7 +171,7 @@ return {
 			end,
 		})
 
-		lspconfig.vtsls.setup({
+		vim.lsp.config("vtsls", {
 			capabilities = capabilities,
 			settings = {
 				typescript = {
@@ -183,45 +182,42 @@ return {
 			},
 		})
 
-		lspconfig.lua_ls.setup({
+		vim.lsp.config("lua_ls", {
 			capabilities = capabilities,
 		})
 
-		lspconfig.tailwindcss.setup({
+		vim.lsp.config("tailwindcss", {
 			capabilities = capabilities,
 		})
 
-		lspconfig.cssls.setup({
+		vim.lsp.config("cssls", {
 			capabilities = capabilities,
 		})
 
-		lspconfig.gopls.setup({
+		vim.lsp.config("gopls", {
 			capabilities = capabilities,
 			cmd = { "gopls" },
 			filetypes = { "go", "gomod", "gowork", "gotmpl" },
 		})
 
-		lspconfig.html.setup({
+		vim.lsp.config("html", {
 			capabilities = capabilities,
 		})
 
-		lspconfig.csharp_ls.setup({
+		vim.lsp.config("csharp_ls", {
 			capabilities = capabilities,
 		})
 
-		lspconfig.emmet_language_server.setup({
+		vim.lsp.config("emmet_language_server", {
 			capabilities = capabilities,
-			filetypes = {
-				"html",
-				"templ",
-			},
+			filetypes = { "html", "templ" },
 		})
 
-		lspconfig.intelephense.setup({
+		vim.lsp.config("intelephense", {
 			capabilities = capabilities,
 		})
 
-		lspconfig.biome.setup({
+		vim.lsp.config("biome", {
 			filetypes = {
 				"javascript",
 				"javascriptreact",
@@ -237,17 +233,17 @@ return {
 			},
 		})
 
-		lspconfig.svelte.setup({
+		vim.lsp.config("svelte", {
 			capabilities = capabilities,
 		})
 
-		lspconfig.terraformls.setup({
+		vim.lsp.config("terraformls", {
 			capabilities = capabilities,
 			filetypes = { "terraform", "tf" },
 		})
 
-		lspconfig.sourcekit.setup({
-			on_attach = function(client, bufnr)
+		vim.lsp.config("sourcekit", {
+			on_attach = function(_, bufnr)
 				vim.diagnostic.disable(bufnr)
 			end,
 			workspace = {
@@ -257,7 +253,7 @@ return {
 			},
 		})
 
-		vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+		vim.api.nvim_create_autocmd("BufWritePre", {
 			pattern = { "*.tf", "*.tfvars" },
 			callback = function()
 				vim.lsp.buf.format()
