@@ -1,5 +1,6 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
+	lazy = false,
 	build = ":TSUpdate",
 	event = { "BufReadPre", "BufNewFile" },
 	config = function()
@@ -27,7 +28,6 @@ return {
 				"svelte",
 				"hcl",
 				"terraform",
-				"swift",
 			},
 		})
 	end,
