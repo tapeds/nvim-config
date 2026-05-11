@@ -11,7 +11,17 @@ return {
 		servers = {
 			eslint = {
 				root_dir = function(...)
-					return require("lspconfig.util").root_pattern("package.json")(...)
+					return require("lspconfig.util").root_pattern(
+						"eslint.config.js",
+						"eslint.config.mjs",
+						"eslint.config.cjs",
+						".eslintrc",
+						".eslintrc.js",
+						".eslintrc.cjs",
+						".eslintrc.yaml",
+						".eslintrc.yml",
+						".eslintrc.json"
+					)(...)
 				end,
 				settings = {
 					workingDirectories = { mode = "auto" },
@@ -162,11 +172,41 @@ return {
 		})
 
 		vim.lsp.config("eslint", {
+			root_dir = function(fname)
+				return require("lspconfig.util").root_pattern(
+					"eslint.config.js",
+					"eslint.config.mjs",
+					"eslint.config.cjs",
+					".eslintrc",
+					".eslintrc.js",
+					".eslintrc.cjs",
+					".eslintrc.yaml",
+					".eslintrc.yml",
+					".eslintrc.json"
+				)(fname)
+			end,
+			settings = {
+				workingDirectories = { mode = "auto" },
+			},
 			on_attach = function(client, bufnr)
-				client.server_capabilities.diagnosticProvider = false
 				vim.api.nvim_create_autocmd("BufWritePre", {
 					buffer = bufnr,
-					command = "EslintFixAll",
+					callback = function()
+						local root = vim.fs.root(bufnr, {
+							"eslint.config.js",
+							"eslint.config.mjs",
+							"eslint.config.cjs",
+							".eslintrc",
+							".eslintrc.js",
+							".eslintrc.cjs",
+							".eslintrc.yaml",
+							".eslintrc.yml",
+							".eslintrc.json",
+						})
+						if root and vim.fn.exists(":EslintFixAll") == 2 then
+							vim.cmd("EslintFixAll")
+						end
+					end,
 				})
 			end,
 		})
@@ -218,6 +258,10 @@ return {
 		})
 
 		vim.lsp.config("biome", {
+			root_dir = function(fname)
+				return require("lspconfig.util").root_pattern("biome.json", "biome.jsonc")(fname)
+			end,
+			single_file_support = false,
 			filetypes = {
 				"javascript",
 				"javascriptreact",

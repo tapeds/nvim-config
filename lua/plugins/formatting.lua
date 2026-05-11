@@ -11,11 +11,12 @@ return {
 				lua = { "stylua" },
 				swift = { "swiftformat" },
 				javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
+				javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
 				typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
 				typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
 				css = { "biome", "prettierd", "prettier", stop_after_first = true },
 				html = { "prettierd", "prettier", stop_after_first = true },
-				json = { "prettierd", "prettier", stop_after_first = true },
+				json = { "biome", "prettierd", "prettier", stop_after_first = true },
 				yaml = { "prettierd", "prettier", stop_after_first = true },
 				markdown = { "prettierd", "prettier", stop_after_first = true },
 			},
@@ -25,7 +26,7 @@ return {
 					return
 				end
 
-				return { timeout_ms = 500, lsp_format = "fallback" }
+				return { timeout_ms = 500, lsp_format = "never" }
 			end,
 			formatters = {
 				prettier = {
@@ -69,9 +70,8 @@ return {
 				biome = {
 					require_cwd = true,
 					cwd = util.root_file({
-						-- https://prettier.io/docs/en/configuration.html
 						"biome.json",
-						-- "package.json",
+						"biome.jsonc",
 					}),
 				},
 			},
