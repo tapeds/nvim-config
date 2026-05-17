@@ -6,301 +6,61 @@ return {
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		"hrsh7th/cmp-nvim-lsp",
 	},
-	opts = {
-		inlay_hints = { enabled = true },
-		servers = {
-			eslint = {
-				root_dir = function(...)
-					return require("lspconfig.util").root_pattern(
-						"eslint.config.js",
-						"eslint.config.mjs",
-						"eslint.config.cjs",
-						".eslintrc",
-						".eslintrc.js",
-						".eslintrc.cjs",
-						".eslintrc.yaml",
-						".eslintrc.yml",
-						".eslintrc.json"
-					)(...)
-				end,
-				settings = {
-					workingDirectories = { mode = "auto" },
-				},
-			},
-			biome = {
-				single_file_support = false,
-				root_dir = function(...)
-					return require("lspconfig.util").root_pattern("biome.json", "biome.jsonc")(...)
-				end,
-			},
-			cssls = {},
-			tailwindcss = {
-				root_dir = function(...)
-					return require("lspconfig.util").root_pattern(
-						"tailwind.config.cjs",
-						"tailwind.config.js",
-						"postcss.config.js"
-					)(...)
-				end,
-			},
-			vtsls = {
-				root_dir = function(...)
-					return require("lspconfig.util").root_pattern("tsconfig.json", "jsconfig.json", "package.json")(...)
-				end,
-				single_file_support = false,
-				init_options = {
-					preferences = {
-						importModuleSpecifier = "non-relative",
-						importModuleSpecifierPreference = "non-relative",
-					},
-				},
-				settings = {
-					typescript = {
-						autoClosingTags = true,
-						inlayHints = {
-							includeInlayParameterNameHints = "literal",
-							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-							includeInlayFunctionParameterTypeHints = true,
-							includeInlayVariableTypeHints = false,
-							includeInlayPropertyDeclarationTypeHints = true,
-							includeInlayFunctionLikeReturnTypeHints = true,
-							includeInlayEnumMemberValueHints = true,
-						},
-						preferences = {
-							importModuleSpecifier = "non-relative",
-							importModuleSpecifierPreference = "non-relative",
-						},
-					},
-					javascript = {
-						inlayHints = {
-							includeInlayParameterNameHints = "all",
-							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-							includeInlayFunctionParameterTypeHints = true,
-							includeInlayVariableTypeHints = true,
-							includeInlayPropertyDeclarationTypeHints = true,
-							includeInlayFunctionLikeReturnTypeHints = true,
-							includeInlayEnumMemberValueHints = true,
-						},
-					},
-				},
-			},
-			gopls = {
-				root_dir = function(...)
-					return require("lspconfig.util").root_pattern("go.work", "go.mod")(...)
-				end,
-			},
-			emmet_language_server = {
-				filetypes = { "html" },
-			},
-			html = {},
-			lua_ls = {
-				single_file_support = true,
-				settings = {
-					Lua = {
-						workspace = {
-							checkThirdParty = false,
-						},
-						completion = {
-							workspaceWord = true,
-							callSnippet = "Both",
-						},
-						misc = {
-							parameters = {},
-						},
-						hint = {
-							enable = true,
-							setType = false,
-							paramType = true,
-							paramName = "Disable",
-							semicolon = "Disable",
-							arrayIndex = "Disable",
-						},
-						doc = {
-							privateName = { "^_" },
-						},
-						type = {
-							castNumberToInteger = true,
-						},
-						diagnostics = {
-							disable = { "incomplete-signature-doc", "trailing-space" },
-							-- enable = false,
-							groupSeverity = {
-								strong = "Warning",
-								strict = "Warning",
-							},
-							groupFileStatus = {
-								["ambiguity"] = "Opened",
-								["await"] = "Opened",
-								["codestyle"] = "None",
-								["duplicate"] = "Opened",
-								["global"] = "Opened",
-								["luadoc"] = "Opened",
-								["redefined"] = "Opened",
-								["strict"] = "Opened",
-								["strong"] = "Opened",
-								["type-check"] = "Opened",
-								["unbalanced"] = "Opened",
-								["unused"] = "Opened",
-							},
-							unusedLocalExclude = { "_*" },
-						},
-						format = {
-							enable = false,
-							defaultConfig = {
-								indent_style = "space",
-								indent_size = "2",
-								continuation_indent_size = "2",
-							},
-						},
-					},
-				},
-			},
-			setup = {},
-		},
-	},
 	config = function()
+		local languages = require("config.languages")
 		local mason = require("mason")
 		local mason_lspconfig = require("mason-lspconfig")
 		local mason_tool_installer = require("mason-tool-installer")
+		local lspconfig_util = require("lspconfig.util")
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+		local function root_pattern(...)
+			local matcher = lspconfig_util.root_pattern(...)
+
+			return function(bufnr, on_dir)
+				local fname = vim.api.nvim_buf_get_name(bufnr)
+				local root = matcher(fname)
+
+				if root then
+					on_dir(root)
+				end
+			end
+		end
+
+		local function root_pattern_or_file(...)
+			local matcher = lspconfig_util.root_pattern(...)
+
+			return function(bufnr, on_dir)
+				local fname = vim.api.nvim_buf_get_name(bufnr)
+				on_dir(matcher(fname) or vim.fs.dirname(fname))
+			end
+		end
+
+		local function setup(server, config)
+			config = config or {}
+			config.capabilities = vim.tbl_deep_extend("force", capabilities, config.capabilities or {})
+			vim.lsp.config(server, config)
+		end
+
 		vim.api.nvim_create_autocmd("LspAttach", {
-			callback = function()
-				vim.keymap.set("n", "K", vim.lsp.buf.hover, { silent = true })
-				vim.keymap.set("n", "gd", vim.lsp.buf.definition, { silent = true })
+			group = vim.api.nvim_create_augroup("UserLspKeymaps", { clear = true }),
+			callback = function(event)
+				local opts = { buffer = event.buf, silent = true }
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 			end,
 		})
 
-		vim.lsp.config("eslint", {
-			root_dir = function(fname)
-				return require("lspconfig.util").root_pattern(
-					"eslint.config.js",
-					"eslint.config.mjs",
-					"eslint.config.cjs",
-					".eslintrc",
-					".eslintrc.js",
-					".eslintrc.cjs",
-					".eslintrc.yaml",
-					".eslintrc.yml",
-					".eslintrc.json"
-				)(fname)
-			end,
-			settings = {
-				workingDirectories = { mode = "auto" },
-			},
-			on_attach = function(client, bufnr)
-				vim.api.nvim_create_autocmd("BufWritePre", {
-					buffer = bufnr,
-					callback = function()
-						local root = vim.fs.root(bufnr, {
-							"eslint.config.js",
-							"eslint.config.mjs",
-							"eslint.config.cjs",
-							".eslintrc",
-							".eslintrc.js",
-							".eslintrc.cjs",
-							".eslintrc.yaml",
-							".eslintrc.yml",
-							".eslintrc.json",
-						})
-						if root and vim.fn.exists(":EslintFixAll") == 2 then
-							vim.cmd("EslintFixAll")
-						end
-					end,
-				})
-			end,
-		})
-
-		vim.lsp.config("vtsls", {
-			capabilities = capabilities,
-			settings = {
-				typescript = {
-					preferences = {
-						importModuleSpecifier = "non-relative",
-					},
-				},
-			},
-		})
-
-		vim.lsp.config("lua_ls", {
-			capabilities = capabilities,
-		})
-
-		vim.lsp.config("tailwindcss", {
-			capabilities = capabilities,
-		})
-
-		vim.lsp.config("cssls", {
-			capabilities = capabilities,
-		})
-
-		vim.lsp.config("gopls", {
-			capabilities = capabilities,
-			cmd = { "gopls" },
-			filetypes = { "go", "gomod", "gowork", "gotmpl" },
-		})
-
-		vim.lsp.config("html", {
-			capabilities = capabilities,
-		})
-
-		vim.lsp.config("csharp_ls", {
-			capabilities = capabilities,
-		})
-
-		vim.lsp.config("emmet_language_server", {
-			capabilities = capabilities,
-			filetypes = { "html", "templ" },
-		})
-
-		vim.lsp.config("intelephense", {
-			capabilities = capabilities,
-		})
-
-		vim.lsp.config("biome", {
-			root_dir = function(fname)
-				return require("lspconfig.util").root_pattern("biome.json", "biome.jsonc")(fname)
-			end,
-			single_file_support = false,
-			filetypes = {
-				"javascript",
-				"javascriptreact",
-				"json",
-				"jsonc",
-				"typescript",
-				"typescript.tsx",
-				"typescriptreact",
-				"astro",
-				"svelte",
-				"vue",
-				"css",
-			},
-		})
-
-		vim.lsp.config("svelte", {
-			capabilities = capabilities,
-		})
-
-		vim.lsp.config("terraformls", {
-			capabilities = capabilities,
-			filetypes = { "terraform", "tf" },
-		})
-
-		vim.lsp.config("sourcekit", {
-			on_attach = function(_, bufnr)
-				vim.diagnostic.disable(bufnr)
-			end,
-			workspace = {
-				didChangeWatchedFiles = {
-					dynamicRegistration = true,
-				},
-			},
-		})
+		for server, config in pairs(languages.lsp_servers(root_pattern, root_pattern_or_file)) do
+			setup(server, config)
+		end
+		pcall(vim.lsp.enable, "sourcekit")
 
 		vim.api.nvim_create_autocmd("BufWritePre", {
+			group = vim.api.nvim_create_augroup("UserTerraformFormat", { clear = true }),
 			pattern = { "*.tf", "*.tfvars" },
-			callback = function()
-				vim.lsp.buf.format()
+			callback = function(event)
+				vim.lsp.buf.format({ bufnr = event.buf, timeout_ms = 1000 })
 			end,
 		})
 
@@ -315,28 +75,12 @@ return {
 		})
 
 		mason_lspconfig.setup({
-			ensure_installed = {
-				"vtsls",
-				"cssls",
-				"html",
-				"gopls",
-				"tailwindcss",
-				"lua_ls",
-				"biome",
-				"emmet_language_server",
-				"svelte",
-				"terraformls",
-			},
-			automatic_installation = true,
+			ensure_installed = languages.mason_lsp_servers,
+			automatic_enable = true,
 		})
 
 		mason_tool_installer.setup({
-			ensure_installed = {
-				"prettierd",
-				"prettier",
-				"stylua",
-				"eslint",
-			},
+			ensure_installed = languages.mason_tools,
 		})
 	end,
 }

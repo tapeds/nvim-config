@@ -1,20 +1,21 @@
 return {
 	"akinsho/toggleterm.nvim",
 	version = "*",
-	config = function()
-		require("toggleterm").setup({
-			size = 15,
-			open_mapping = [[<C-\>]],
-			hide_numbers = true,
-			shade_filetypes = {},
-			shade_terminals = true,
-			shading_factor = 1,
-			start_in_insert = true,
-			insert_mappings = true,
-			persist_size = true,
-			direction = "float",
-			close_on_exit = true,
-		})
+	opts = {
+		size = 15,
+		open_mapping = [[<C-\>]],
+		hide_numbers = true,
+		shade_filetypes = {},
+		shade_terminals = true,
+		shading_factor = 1,
+		start_in_insert = true,
+		insert_mappings = true,
+		persist_size = true,
+		direction = "float",
+		close_on_exit = true,
+	},
+	config = function(_, opts)
+		require("toggleterm").setup(opts)
 
 		function _G.toggle_term_by_id(id)
 			local Terminal = require("toggleterm.terminal").Terminal
@@ -27,9 +28,11 @@ return {
 			end
 		end
 
-		vim.api.nvim_set_keymap("n", ";t", "<cmd>lua toggle_term_by_id(1)<CR>", { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("t", ";t", "<cmd>lua toggle_term_by_id(1)<CR>", { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("n", ";g", "<cmd>lua toggle_term_by_id(2)<CR>", { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("t", ";g", "<cmd>lua toggle_term_by_id(2)<CR>", { noremap = true, silent = true })
+		vim.keymap.set({ "n", "t" }, ";t", function()
+			_G.toggle_term_by_id(1)
+		end, { silent = true })
+		vim.keymap.set({ "n", "t" }, ";g", function()
+			_G.toggle_term_by_id(2)
+		end, { silent = true })
 	end,
 }

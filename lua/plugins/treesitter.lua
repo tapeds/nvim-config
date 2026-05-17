@@ -3,32 +3,15 @@ return {
 	lazy = false,
 	build = ":TSUpdate",
 	event = { "BufReadPre", "BufNewFile" },
-	config = function()
-		local configs = require("nvim-treesitter.configs")
 
-		configs.setup({
+	opts = function()
+		local languages = require("config.languages")
+
+		return {
 			highlight = { enable = true },
 			sync_install = false,
 			auto_install = true,
-			ensure_installed = {
-				"javascript",
-				"typescript",
-				"css",
-				"html",
-				"go",
-				"gitignore",
-				"graphql",
-				"http",
-				"json",
-				"scss",
-				"sql",
-				"vim",
-				"lua",
-				"tsx",
-				"svelte",
-				"hcl",
-				"terraform",
-			},
-		})
+			ensure_installed = languages.treesitter,
+		}
 	end,
 }

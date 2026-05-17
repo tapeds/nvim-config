@@ -79,6 +79,12 @@ keymap.set("n", "sl", "<C-w>l")
 -- Open Error
 keymap.set("n", "ee", ":lua vim.diagnostic.open_float()<Return>")
 
+-- VS Code-style indentation that works reliably in terminal Neovim.
+keymap.set("n", "<S-Tab>", "<<", opts)
+keymap.set("n", "<Tab>", ">>", opts)
+keymap.set("v", "<S-Tab>", "<gv", opts)
+keymap.set("v", "<Tab>", ">gv", opts)
+
 vim.opt.clipboard:append({ "unnamedplus" })
 vim.g.clipboard = {
 	name = "macOS-clipboard",
