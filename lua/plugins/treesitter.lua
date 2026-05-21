@@ -1,17 +1,17 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
+	branch = "master",
 	lazy = false,
 	build = ":TSUpdate",
-	event = { "BufReadPre", "BufNewFile" },
 
-	opts = function()
+	config = function()
 		local languages = require("config.languages")
 
-		return {
+		require("nvim-treesitter.configs").setup({
 			highlight = { enable = true },
 			sync_install = false,
 			auto_install = true,
 			ensure_installed = languages.treesitter,
-		}
+		})
 	end,
 }
