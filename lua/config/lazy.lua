@@ -57,7 +57,7 @@ vim.wo.relativenumber = true
 
 vim.opt.splitright = true
 vim.opt.splitkeep = "cursor"
-vim.opt.mouse = ""
+-- vim.opt.mouse = ""
 vim.opt.clipboard:append("unnamedplus")
 vim.opt.swapfile = false
 
