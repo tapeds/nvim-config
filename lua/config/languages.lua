@@ -59,11 +59,16 @@ M.treesitter = {
 	"css",
 	"html",
 	"go",
+	"gomod",
+	"gosum",
 	"php",
 	"gitignore",
 	"graphql",
 	"http",
 	"json",
+	"markdown",
+	"markdown_inline",
+	"yaml",
 	"scss",
 	"sql",
 	"vim",
@@ -76,6 +81,7 @@ M.treesitter = {
 M.formatters_by_ft = {
 	lua = { "stylua" },
 	swift = { "swiftformat" },
+	go = { "goimports", "gofmt" },
 	javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
 	javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
 	typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
@@ -85,6 +91,8 @@ M.formatters_by_ft = {
 	json = { "biome", "prettierd", "prettier", stop_after_first = true },
 	yaml = { "prettierd", "prettier", stop_after_first = true },
 	markdown = { "prettierd", "prettier", stop_after_first = true },
+	graphql = { "prettierd", "prettier", stop_after_first = true },
+	svelte = { "prettierd", "prettier", stop_after_first = true },
 	php = { "php_cs_fixer" },
 }
 
@@ -101,12 +109,14 @@ M.mason_lsp_servers = {
 	"svelte",
 	"terraformls",
 	"intelephense",
+	"marksman",
 }
 
 M.mason_tools = {
 	"prettierd",
 	"prettier",
 	"stylua",
+	"goimports",
 	"php-cs-fixer",
 }
 
@@ -259,6 +269,9 @@ function M.lsp_servers(root_pattern, root_pattern_or_file)
 					},
 				},
 			},
+		},
+		marksman = {
+			filetypes = { "markdown", "markdown.mdx" },
 		},
 		sourcekit = {
 			on_attach = function(_, bufnr)
