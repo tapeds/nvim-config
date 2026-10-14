@@ -86,18 +86,34 @@ keymap.set("v", "<S-Tab>", "<gv", opts)
 keymap.set("v", "<Tab>", ">gv", opts)
 
 vim.opt.clipboard:append({ "unnamedplus" })
-vim.g.clipboard = {
-	name = "macOS-clipboard",
-	copy = {
-		["+"] = "pbcopy",
-		["*"] = "pbcopy",
-	},
-	paste = {
-		["+"] = "pbpaste",
-		["*"] = "pbpaste",
-	},
-	cache_enabled = 0,
-}
+
+if vim.fn.has("mac") == 1 then
+	vim.g.clipboard = {
+		name = "macOS-clipboard",
+		copy = {
+			["+"] = "pbcopy",
+			["*"] = "pbcopy",
+		},
+		paste = {
+			["+"] = "pbpaste",
+			["*"] = "pbpaste",
+		},
+		cache_enabled = 0,
+	}
+elseif vim.fn.has("wsl") == 1 then
+	vim.g.clipboard = {
+		name = "WslClipboard",
+		copy = {
+			["+"] = "win32yank.exe -i --crlf",
+			["*"] = "win32yank.exe -i --crlf",
+		},
+		paste = {
+			["+"] = "win32yank.exe -o --lf",
+			["*"] = "win32yank.exe -o --lf",
+		},
+		cache_enabled = 0,
+	}
+end
 
 -- Setup lazy.nvim
 require("lazy").setup({
